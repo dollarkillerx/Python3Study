@@ -82,7 +82,7 @@ docker run -d -v $(PWD):/data python3alpine
       print('+++++++++++')
 
   ```
-- for 遍历循环
+- for 遍历循环  `for key in param` `for key,value in param`
   ```
   expression_list = [1,2,3,4,5,6]
 
@@ -95,8 +95,7 @@ docker run -d -v $(PWD):/data python3alpine
     print(i)
   ```
 
-### 小技巧
-- print(x,end='|') end 结尾
+
 
 ### 工程的组织结构: 包,模块,类
 `包>模块>类>函数,变量`
@@ -126,4 +125,164 @@ docker run -d -v $(PWD):/data python3alpine
   if __name__ == '__main__':
       pass
   ```
-  
+- 顶级包是 main的位置
+- 相对导入不能在main里面用
+
+### 函数
+- 内置函数
+  - round(val,保留小数点几位) 会自动4>5入
+- 特性
+  - 功能性
+  - 隐藏细节
+  - 复用性
+- 定义以及运行特点
+```
+def funcname (parameter_list) :
+    pass
+```
+- 让函数返回多个结果
+  ```
+  def mmf() :
+    a = 'skill'
+    b = 45
+    return a,b
+
+  a,b = mmf() # 序列解包
+  print(a)
+  ```
+  返回的是元组
+- 序列解包 与 链式赋值
+  ```
+  a = 1
+  b = 2
+  c = 3
+  # or
+  a,b,c = 1,2,3
+
+  d = 1,2,3
+  a,d,c = d
+  ```
+- 必须参数与关联参数
+  - 必须参数
+    ```
+    def add(x,y) :
+    ```
+  - 关联参数
+    ```
+    def add(x,y):
+    add(y=,x=)
+    ```
+- 可变参数
+    ```
+    def add(a ,*param):
+        pass
+    add(1,2,3,5,6,,)
+    # param为元组
+    ```
+- 关键字可变参数
+    ```
+    def city_temp(**) :
+        pass
+    city_temp(bj='123',xm='sds',sh='sds')
+    ```
+- 变量作用域
+  - 函数内部可以调用函数外部的变量 当函数内部局部变量和全局变量重名时,会调用函数内部变量
+  - Python 没有块级作用域概念
+- global 关键字
+  ```
+  def demo() :
+    global c 
+    c = 2
+  demo()
+  print(c)
+  ```
+
+### 面向对象
+- 类 最基本的作用: 封装
+  ```
+  class Student() :
+    c = 2 # class 变量
+
+    def print_file(self) :
+        print('hello' + str(self.c))
+        self.pr()
+
+    def pr(self) :
+        print('123')
+
+  student = Student()
+  student.print_file()
+  ```
+- 构造函数
+  - `def __init__(self)`
+  - 当实例化时,就会被调用
+    ```
+    class Student() :
+      name = ''
+      age = 0
+      
+      def __init__(self,name,age) :
+          self.name = name
+          self.age = age
+
+      def do_homework(self) :
+          print(self.name + 'do homeworld')
+
+    student = Student('dollarkiller',16)
+
+    student.do_homework()
+    ```
+  - 实例方法
+    ```
+    def do_homework(self) :
+        print(self.name + 'do homeworld')
+    ```
+    - 实例方法访问类变量
+        ```
+        def add(self) :
+            self.__class__.sum
+        ```
+  - 类方法
+      ```
+      @classmethod  #装饰器
+      def plus_sum(cls) :
+          pass
+      ```
+  - 静态方法
+      ```
+      @staticmethod
+      def add(x,y):
+          pass
+      ```
+  - 成员可见性
+    - 私有 方法前 加 __
+
+  - 小重点
+    ```
+    class Test() :
+        sums = 12
+
+        def __init__(self,age) :
+            self.sums = age
+            self.__class__.sums += 16
+            print(self.__class__.sums)
+            print(self.sums)
+
+    test = Test(15)
+    test1 = Test(15)
+    输出:
+    28
+    15
+    44
+    15
+    ```
+    
+
+### 小技巧 与 规范
+- print(x,end='|') end 结尾
+- class name 大写开头 大驼峰
+- 变量 小写_链接
+- 方法和函数的区别
+  - 方法: 设计层面 类
+  - 函数: 程序运行,过程式的称谓 模块 
+  - 模块下的 变量:称为数据成员
