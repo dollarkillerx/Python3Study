@@ -452,3 +452,14 @@ f2('dollarsda','asdasdsad')
         - vudei-number
 - 技巧
   - htmls = str(htmls,encoding='utf-8')
+
+
+### 完结了 在 讲下 pipenv
+- `pip3 install pipenv` 安装
+- `pipenv install`  部署
+- `pipenv shell` 进入
+- `pipenv install flask` install package
+- `exit` 退出虚拟环境
+- `pipenv uninstall flask` uninstall package
+- `pipenv graph` 依赖环境
+- Docker 天下无敌
