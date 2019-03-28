@@ -256,7 +256,12 @@ def funcname (parameter_list) :
       ```
   - 成员可见性
     - 私有 方法前 加 __
-
+  - 继承
+    ```
+    class Student(Human) : # student继承Human
+    ```
+    - super 调用父类
+      - `super(Student子类,self).__init__(name,age)` 这个init就不用传self1了
   - 小重点
     ```
     class Test() :
@@ -276,7 +281,152 @@ def funcname (parameter_list) :
     44
     15
     ```
-    
+### 正则表达式 与 JSON
+- 初窥  
+    ```
+    import re
+    a = 'C|C++|JAVA|C#|PHP|PYTHON|JS|TS'
+    re.findall('正则',a)
+    ```
+- 元字符 与 普通 字符
+  - `[ca]` c or a `r = re.findall('a[cf]c',s)`
+  - `[^ca]` 除了 c a 之外的
+  - `[a-d]` a ~ b 之间的
+  - 概括字符集
+    - '\d' 数字
+    - '\D' 非数字
+    - '\w' 匹配字母或数字或下划线或汉字 等价于 '[^A-Za-z0-9_]'
+    - '\s' 匹配任意的空白符
+    - `.` 匹配换行付之外的所有
+  - 数量词
+    -  `r = re.findall('[a-z]{3}',a)` 匹配三长度 {min,max}
+    -  `*` 匹配0次或者无限次
+    -  `+` 匹配一次或者无限次
+    -  `?` 匹配0次或者一次
+  - 贪婪和非贪婪
+    -   `r = re.findall('[a-z]{3,6}?',a)` 默认贪婪,加?非贪婪
+  -   边界匹配
+      -  ^ 匹配字符串的开始
+      - $ 匹配字符串的结束
+  - 组
+    - `r = re.findall('(Python){3}',a)`
+  - 匹配模式参数
+    - `r - re.findall('',,模式|模式|模式)`
+    - `re.I` 忽略大小写
+    - `re.S` 包括换行符
+  - re.sub 正则替换
+    - `re.sub(正则,替换成的,原字符串,count,匹配模式)`
+    - count替换的个数,不填全部替换 0 全部替换 1 替换一个 
+    - 代码实例: test3>t8
+  - 把函数当做参数传递
+    ```
+    import re
+
+    s = 'AB5AS4DG4R8DGRT5GH4F8H48SF5SDF4SD89J5YUK9UIL98'
+
+    def conver(value) :
+        bbs = value.group()
+        if int(bbs) >= 6:
+            return '\n'
+        
+
+    r = re.sub('\d',conver,s)
+
+    print(r)
+    ```
+    - search 与 match 函数 (不常用)
+      - re.match 从开始匹配 if not return none
+      - re.search 返回match对象
+      - 处理 match对象
+        - `r = re.search('\d',s)`
+        - 获取匹配内容
+          - `r.group()`
+        - 获取匹配内容位置
+          - `r.span()`
+    - group 分组
+    - JSON
+      - 反序列化  `json.loads(json)` 转化为 字典
+        ```
+        import json
+
+        json_str = '{"name":"dollarkiller","age":18}'
+
+        student = json.loads(json_str)
+
+        print(student)
+
+        print(type(student))
+        ```
+      - 序列化 `json.dumps(student)`
+
+### Python 高级语法 与 用法
+- 枚举
+    ```
+    from enum import Enum
+
+    class VIP(Enum) :
+        YELLOW = 1
+        GREEN = 2
+        BLACK = 3
+        RED = 4
+
+    print(VIP.YELLOW) # 这个是不会返回值的
+    ```
+    - 获取枚举的值 `print(VIP.YELLOW.value)`
+    - 获取标签的名字 `print(VIP.YELLOW.name)`
+- Python 高级用法
+  - 函数式编程
+    - 闭包  函数+环境变量   闭包的环境变量会记忆上一次的状态
+      ```
+        def curve_pre() :
+            a = 25
+            def cureve(x) :
+                return a*x*x
+            return cureve
+
+        f = curve_pre()
+        c = f(15)
+        print(c)
+      ```
+
+### 函数式编程
+- lambda 表达式
+  - 匿名函数
+    ```
+    def add(x,y) :
+    return x + y
+
+    f = lambda x,y:x+y
+    print(f(15,75))
+    ```
+  - 三元表达式
+    - `条件判断为true的结果 if 条件判断 else 为假的结果`   
+
+### 装饰器 AOP
+- 不改变原有函数 new func  (开闭原则)
+```
+import time
+
+def decorator(func) :
+    def wrapper(*args) :
+        print(time.time())
+        func(*args)
+    return wrapper
+
+@decorator
+def f1(fun_name) :
+    print('This is a function ' + fun_name)
+
+@decorator
+def f2(func_name,funcname2) :
+    print('This is a function ' + func_name + funcname2)
+
+
+f1('dollarkiller')
+
+f2('dollarsda','asdasdsad')
+```
+
 
 ### 小技巧 与 规范
 - print(x,end='|') end 结尾
@@ -286,3 +436,19 @@ def funcname (parameter_list) :
   - 方法: 设计层面 类
   - 函数: 程序运行,过程式的称谓 模块 
   - 模块下的 变量:称为数据成员
+- 去str空格 str.strip()
+
+### 原生爬虫
+- 目的
+  - 找到数据对应网页
+  - 分析页面结构找到数据所在位置
+- 操作
+  - 模拟HTTP请求 抓取网页
+  - 正则匹配
+    - 数据分析
+      - video-info  
+        - video-title
+        - video-nickname
+        - vudei-number
+- 技巧
+  - htmls = str(htmls,encoding='utf-8')
